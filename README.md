@@ -1,6 +1,7 @@
 # SuiteCRMManifester
 
-A command line tool for creating module packages from a manifest file
+A command line tool for automatically generating a manifest file and copying
+the files into a folder, ready to zip.
 
 # Installation
 
@@ -8,7 +9,15 @@ Clone this repository and run `composer update`.
 
 # Usage
 
-For now there is a single command available
+### update
+
+The update command does a git diff and parses the list of files into our manifest
+file.
+
+`php manifester update <Path to manifest.php> <Path to SCRM instance> <commit>`
+
+The git diff will return a list of changed files since `commit` and incorporate
+this list into the manifest.php
 
 ### fulfill
 
