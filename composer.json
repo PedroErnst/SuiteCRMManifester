@@ -2,9 +2,7 @@
     "name": "salesagility/manifester",
     "description": "A CLI application to manage SuiteCRM modules and manifests",
     "require": {
-        "symfony/console": "^4.0",
-        "symfony/finder": "^4.0",
-        "symfony/filesystem": "^4.0",
+        "symfony/console": "^4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^7.0"
@@ -17,7 +15,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "Iconizer\\": "src/"
+            "Manifester\\": "src/"
         }
     }
 }

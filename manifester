@@ -1,0 +1,9 @@
+<?php
+
+use Manifester\Manifester;
+
+require __DIR__ . '/vendor/autoload.php';
+
+$app = new Manifester();
+
+$app->run();
