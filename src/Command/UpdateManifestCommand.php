@@ -2,6 +2,7 @@
 
 namespace Manifester\Command;
 
+use Manifester\Manifest;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +31,7 @@ class UpdateManifestCommand extends Command
     private $installDefs;
 
     /**
-     * @var array
+     * @var Manifest
      */
     private $manifest;
 
@@ -40,17 +41,7 @@ class UpdateManifestCommand extends Command
     private $files;
 
     /**
-     * @var resource
-     */
-    private $file;
-
-    /**
-     * @var int
-     */
-    private $indentation = 0;
-
-    /**
-     * FulfillManifestCommand constructor.
+     * UpdateManifestCommand constructor.
      * @param null $name
      */
     public function __construct($name = null)
@@ -88,8 +79,8 @@ class UpdateManifestCommand extends Command
         try {
             $this->loadManifest();
             $this->parseChangedFiles();
-            $this->setUpDefs();
-            $this->writeManifest();
+            $this->manifest->parseChangedFiles($this->files);
+            $this->manifest->writeOut();
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
@@ -104,18 +95,13 @@ class UpdateManifestCommand extends Command
         if (!is_writable($this->manifestPath)) {
             throw new \Exception('Manifest folder is not writable!');
         }
+
         $path = $this->manifestPath . '/manifest.php';
-        if (!file_exists($path)) {
-            throw new \Exception('Unable to locate manifest at: ' . $path);
-        }
-        $manifest = [];
-        $installdefs = [];
-        require_once $path;
-        if (!is_array($manifest)) {
+        $this->manifest = Manifest::fromFile($path);
+
+        if (!$this->manifest->validateManifest()) {
             throw new \Exception('$manifest not an array in manifest.php?');
         }
-        $this->installDefs = $installdefs;
-        $this->manifest = $manifest;
     }
 
     /**
@@ -129,91 +115,5 @@ class UpdateManifestCommand extends Command
 
         $command = 'cd ' . $this->instancePath . ' && git diff --name-only ' . $this->commit;
         exec($command, $this->files);
-    }
-
-    /**
-     *
-     */
-    private function setUpDefs()
-    {
-        $langFiles = [];
-        $copyFiles = [];
-        foreach ($this->files as $file) {
-            if (strpos($file, 'en_us') !== false) {
-                $module = 'application';
-                if (strpos($file, 'custom/Extension/modules/') !== false) {
-                    $startPos = strpos($file, 'custom/Extension/modules/')
-                        + strlen('custom/Extension/modules/');
-                    $module = substr(
-                        $file,
-                        $startPos,
-                        strpos($file, '/', $startPos) - $startPos
-                    );
-
-                }
-                $langFiles[] = [
-                    'from' => '<basepath>/' . $file,
-                    'to_module' => $module,
-                    'language' => 'en_us',
-                ];
-                continue;
-            }
-            $copyFiles[] = [
-                'from' => '<basepath>/' . $file,
-                'to' => $file,
-            ];
-        }
-
-        $this->installDefs['copy'] = $copyFiles;
-        $this->installDefs['language'] = $langFiles;
-    }
-
-    private function writeManifest()
-    {
-        $this->file = fopen($this->manifestPath . '/manifest.php', 'w');
-
-        $this->write('<?php');
-
-        $this->endLine();
-        $this->write('$manifest = ');
-        $this->writeVariable($this->manifest);
-        $this->write(';');
-
-        $this->endLine();
-        $this->write('$installdefs = ');
-        $this->writeVariable($this->installDefs);
-        $this->write(';');
-
-        fclose( $this->file);
-    }
-
-    private function writeVariable($var)
-    {
-        if (is_array($var)) {
-            $this->write('[');
-            $this->indentation += 4;
-            $this->endLine();
-            foreach ($var as $key => $value) {
-                $this->write("'" . $key . "' => ");
-                $this->writeVariable($value);
-                $this->write(',');
-                $this->endLine();
-            }
-            $this->indentation -= 4;
-            $this->write(']');
-            return;
-        }
-        $this->write("'" . $var . "'");
-    }
-
-    private function write($value)
-    {
-        fwrite($this->file, $value);
-    }
-
-    private function endLine()
-    {
-        $this->write(PHP_EOL);
-        fwrite($this->file, str_repeat(' ', $this->indentation));
     }
 }
