@@ -3,6 +3,7 @@
 namespace Manifester;
 
 use Manifester\Command\FulfillManifestCommand;
+use Manifester\Command\NewManifestCommand;
 use Manifester\Command\UpdateManifestCommand;
 use Symfony\Component\Console\Application;
 
@@ -21,5 +22,6 @@ class Manifester extends Application
         parent::__construct();
         $this->add(new FulfillManifestCommand());
         $this->add(new UpdateManifestCommand());
+        $this->add(new NewManifestCommand());
     }
 }

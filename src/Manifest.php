@@ -193,6 +193,7 @@ class Manifest
 
     /**
      * @param string $path
+     * @throws \Exception
      */
     public function writeOut($path = '')
     {
@@ -200,6 +201,10 @@ class Manifest
             $path = $this->path;
         }
         $this->file = fopen($path, 'w');
+
+        if (!$this->file) {
+            throw new \Exception('Unable to open manifest file for writing: ' . $path);
+        }
 
         $this->write('<?php');
 
