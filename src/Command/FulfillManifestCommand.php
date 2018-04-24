@@ -70,6 +70,9 @@ class FulfillManifestCommand extends Command
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
         }
+
+        $output->writeln(sprintf('Copied %s files to manifest folder structure', $this->count));
+        $output->writeln($this->manifestPath);
     }
 
     /**
@@ -116,6 +119,7 @@ class FulfillManifestCommand extends Command
                 $toPath = $this->manifestPath . $from;
 
                 copy($fromPath, $toPath);
+                $this->count++;
             }
         }
     }

@@ -86,6 +86,14 @@ class UpdateManifestCommand extends Command
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
         }
+
+
+        foreach ($this->files as $file) {
+            $output->writeln($file);
+        }
+        $output->writeln('');
+        $output->writeln(sprintf('Updated manifest with %s files', count($this->files)));
+        $output->writeln($this->manifestPath);
     }
 
     /**
