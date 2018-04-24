@@ -268,4 +268,24 @@ class Manifest
         $dt = new \DateTime();
         $this->manifest['published_date'] = $dt->format('Y-m-d H:i:s');
     }
+
+    /**
+     *
+     */
+    public function updateAuthor($force = false)
+    {
+        if ($this->manifest['author'] === '') {
+            $this->manifest['author'] = exec('git config user.name');
+        }
+    }
+
+    /**
+     *
+     */
+    public function incrementVersion()
+    {
+        if ($this->manifest['version'] !== '') {
+            $this->manifest['version'] = (int)$this->manifest['version'] + 1;
+        }
+    }
 }

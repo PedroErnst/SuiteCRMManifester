@@ -55,6 +55,7 @@ class NewManifestCommand extends Command
         try {
             $this->loadDefaultManifest();
             $this->manifest->setPublishedToNow();
+            $this->manifest->updateAuthor();
             $this->manifest->writeOut($this->manifestPath . '/manifest.php');
             copy(__DIR__ . '/../boilerplate/LICENSE.txt', $this->manifestPath . '/LICENSE.txt');
         }
