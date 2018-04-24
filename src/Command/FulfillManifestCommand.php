@@ -2,6 +2,7 @@
 
 namespace Manifester\Command;
 
+use Manifester\Manifest;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,23 +21,14 @@ class FulfillManifestCommand extends Command
     private $manifestPath;
 
     /**
-     * @var array
-     */
-    private $installDefs;
-
-    /**
      * @var int
      */
     private $count = 0;
 
     /**
-     * FulfillManifestCommand constructor.
-     * @param null $name
+     * @var Manifest
      */
-    public function __construct($name = null)
-    {
-        parent::__construct($name);
-    }
+    private $manifest;
 
     /**
      * @inheritdoc
@@ -87,15 +79,14 @@ class FulfillManifestCommand extends Command
             throw new \Exception('Manifest folder is not writable!');
         }
         $path = $this->manifestPath . '/manifest.php';
-        if (!file_exists($path)) {
-            throw new \Exception('Unable to locate manifest at: ' . $path);
+        $this->manifest = Manifest::fromFile($path);
+
+        if (!$this->manifest->validateManifest()) {
+            throw new \Exception('Invalid manifest array!');
         }
-        $installdefs = [];
-        require_once $path;
-        if (!is_array($installdefs)) {
-            throw new \Exception('$installdefs not an array in manifest.php?');
+        if (!$this->manifest->validateInstallDefs()) {
+            throw new \Exception('Invalid installdefs array!');
         }
-        $this->installDefs = $installdefs;
     }
 
     /**
@@ -103,7 +94,8 @@ class FulfillManifestCommand extends Command
      */
     private function copyFiles()
     {
-        foreach ($this->installDefs as $category) {
+        $installdefs = $this->manifest->getInstallDefs();
+        foreach ($installdefs as $category) {
             if (!is_array($category)) {
                 continue;
             }

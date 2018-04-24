@@ -93,7 +93,7 @@ class Manifest
 
         $manifest = [];
         $installdefs = [];
-        require_once $path;
+        require $path;
 
         if (null !== $manifest && is_array($manifest)) {
             $manifestObj->setManifest($manifest);
@@ -218,7 +218,9 @@ class Manifest
         $this->writeVariable($this->installDefs);
         $this->write(';');
 
-        fclose( $this->file);
+        if (!fclose($this->file)) {
+            throw new \Exception('Unable to close manifest file: ' . $path);
+        }
     }
 
     /**

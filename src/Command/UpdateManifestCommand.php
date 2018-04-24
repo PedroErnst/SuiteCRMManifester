@@ -36,15 +36,6 @@ class UpdateManifestCommand extends Command
     private $files;
 
     /**
-     * UpdateManifestCommand constructor.
-     * @param null $name
-     */
-    public function __construct($name = null)
-    {
-        parent::__construct($name);
-    }
-
-    /**
      * @inheritdoc
      */
     protected function configure()

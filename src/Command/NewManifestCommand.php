@@ -21,15 +21,6 @@ class NewManifestCommand extends Command
     private $manifest;
 
     /**
-     * NewManifestCommand constructor.
-     * @param null $name
-     */
-    public function __construct($name = null)
-    {
-        parent::__construct($name);
-    }
-
-    /**
      * @inheritdoc
      */
     protected function configure()
