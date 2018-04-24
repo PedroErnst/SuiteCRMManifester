@@ -259,4 +259,13 @@ class Manifest
         $this->write(PHP_EOL);
         fwrite($this->file, str_repeat(' ', $this->indentation));
     }
+
+    /**
+     *
+     */
+    public function setPublishedToNow()
+    {
+        $dt = new \DateTime();
+        $this->manifest['published_date'] = $dt->format('Y-m-d H:i:s');
+    }
 }

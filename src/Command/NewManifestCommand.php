@@ -54,6 +54,7 @@ class NewManifestCommand extends Command
 
         try {
             $this->loadDefaultManifest();
+            $this->manifest->setPublishedToNow();
             $this->manifest->writeOut($this->manifestPath . '/manifest.php');
         }
         catch (\Exception $e) {

@@ -80,6 +80,7 @@ class UpdateManifestCommand extends Command
             $this->loadManifest();
             $this->parseChangedFiles();
             $this->manifest->parseChangedFiles($this->files);
+            $this->manifest->setPublishedToNow();
             $this->manifest->writeOut();
         }
         catch (\Exception $e) {
