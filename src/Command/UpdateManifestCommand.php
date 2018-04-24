@@ -89,7 +89,7 @@ class UpdateManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            return;
+            return false;
         }
 
         foreach ($this->files as $file) {
@@ -98,6 +98,8 @@ class UpdateManifestCommand extends Command
         $output->writeln('');
         $output->writeln(sprintf('Updated manifest with %s files', count($this->files)));
         $output->writeln($this->manifestPath);
+
+        return true;
     }
 
     /**
