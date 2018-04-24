@@ -56,6 +56,7 @@ class NewManifestCommand extends Command
             $this->loadDefaultManifest();
             $this->manifest->setPublishedToNow();
             $this->manifest->writeOut($this->manifestPath . '/manifest.php');
+            copy(__DIR__ . '/../boilerplate/LICENSE.txt', $this->manifestPath . '/LICENSE.txt');
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
@@ -80,7 +81,7 @@ class NewManifestCommand extends Command
         if (!is_writable($this->manifestPath)) {
             throw new \Exception('Manifest folder is not writable!');
         }
-        $path = __DIR__ . '/../default-manifest.php';
+        $path = __DIR__ . '/../boilerplate/default-manifest.php';
         $this->manifest = Manifest::fromFile($path);
 
         if (!$this->manifest->validateManifest()) {
