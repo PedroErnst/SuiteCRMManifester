@@ -46,7 +46,7 @@ class NewManifestCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return null|int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -61,13 +61,13 @@ class NewManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            return false;
+            return 0;
         }
 
         $output->writeln('Created a new manifest in:');
         $output->writeln($this->manifestPath);
 
-        return true;
+        return 1;
     }
 
     /**

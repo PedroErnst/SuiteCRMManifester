@@ -56,7 +56,7 @@ class FulfillManifestCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return bool
+     * @return null|int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -69,13 +69,13 @@ class FulfillManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            return false;
+            return 0;
         }
 
         $output->writeln(sprintf('Copied %s files to manifest folder structure', $this->count));
         $output->writeln($this->manifestPath);
 
-        return true;
+        return 1;
     }
 
     /**

@@ -67,7 +67,7 @@ class UpdateManifestCommand extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return null|int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -89,7 +89,7 @@ class UpdateManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
-            return false;
+            return 0;
         }
 
         foreach ($this->files as $file) {
@@ -99,7 +99,7 @@ class UpdateManifestCommand extends Command
         $output->writeln(sprintf('Updated manifest with %s files', count($this->files)));
         $output->writeln($this->manifestPath);
 
-        return true;
+        return 1;
     }
 
     /**
