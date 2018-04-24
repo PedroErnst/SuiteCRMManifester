@@ -23,6 +23,13 @@ module folder.
 
 Zip the folder!
 
+### new
+
+The new command takes a folder path, creates it if it doesn't exist, and copies over
+a boilerplate manifest and license.
+
+`php manifester new <directory>`
+
 ### update
 
 The update command does a git diff and parses the list of files into our manifest
@@ -32,6 +39,8 @@ file.
 
 The git diff will return a list of changed files since `commit` and incorporate
 this list into the manifest.php
+
+The commit argument is optional and defaults to `master`
 
 ### fulfill
 
