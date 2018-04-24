@@ -1,4 +1,8 @@
-# SuiteCRMManifester
+# SuiteCRM Manifester
+
+`
+php manifester build /var/www/myNewPackage /var/www/myModifiedInstance
+`
 
 A command line tool for automatically generating a manifest file and copying
 the files into a folder, ready to zip.
@@ -9,19 +13,19 @@ Clone this repository and run `composer update`.
 
 # Usage
 
-Make changes in your SuiteCRM instance, commit them to git.
+1. Make changes in your SuiteCRM instance, commit them to git.
+2. Run the `manifester build` command.
+3. Zip the folder!
 
-Create an empty folder where you want to build your installable module.
+### build
 
-Create a rump manifest with the $manifest array and its variables: author, module
-name etc.
+The build command runs the entire process of `new`, `update` and `fulfill`. This will
+overwrite any existing manifest, so if you want to update a package you should use
+the suitable commands below.
 
-Run the `manifester update` command to update the manifest with the changed files.
+`php manifester build <target directory> <SCRM instance directory> <commit (optional)>`
 
-Run the `manifester fulfill` command to copy all the requested files into the new 
-module folder.
-
-Zip the folder!
+The commit argument is optional and defaults to `master`
 
 ### new
 
