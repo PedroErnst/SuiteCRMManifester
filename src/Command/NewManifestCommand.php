@@ -60,6 +60,7 @@ class NewManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
+            return;
         }
 
         $output->writeln('Created a new manifest in:');

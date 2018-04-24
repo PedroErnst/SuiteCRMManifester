@@ -69,6 +69,7 @@ class FulfillManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
+            return;
         }
 
         $output->writeln(sprintf('Copied %s files to manifest folder structure', $this->count));

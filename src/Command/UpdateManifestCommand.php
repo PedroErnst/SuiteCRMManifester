@@ -87,8 +87,8 @@ class UpdateManifestCommand extends Command
         }
         catch (\Exception $e) {
             $output->writeln($e->getMessage());
+            return;
         }
-
 
         foreach ($this->files as $file) {
             $output->writeln($file);
