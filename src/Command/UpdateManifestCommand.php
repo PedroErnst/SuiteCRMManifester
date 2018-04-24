@@ -23,12 +23,7 @@ class UpdateManifestCommand extends Command
     /**
      * @var string
      */
-    private $commit;
-
-    /**
-     * @var array
-     */
-    private $installDefs;
+    private $commit = 'master';
 
     /**
      * @var Manifest
@@ -59,7 +54,11 @@ class UpdateManifestCommand extends Command
             ->setDescription('Updates a manifest with changed files.')
             ->addArgument('manifest-path', InputArgument::REQUIRED, 'The folder in which to find the manifest.')
             ->addArgument('instance-path', InputArgument::REQUIRED, 'The folder in which the SCRM instance lives.')
-            ->addArgument('commit', InputArgument::REQUIRED, 'The commit from which to look for changed files.')
+            ->addArgument(
+                'commit',
+                InputArgument::OPTIONAL,
+                'The commit from which to look for changed files (defaults to master).'
+            )
             ->setHelp(
                 'Updates a manifest file with files changes in an instance since a certain commit. '
             );
@@ -74,7 +73,10 @@ class UpdateManifestCommand extends Command
     {
         $this->instancePath = $input->getArgument('instance-path');
         $this->manifestPath = $input->getArgument('manifest-path');
-        $this->commit = $input->getArgument('commit');
+
+        if ($input->getArgument('commit')) {
+            $this->commit = $input->getArgument('commit');
+        }
 
         try {
             $this->loadManifest();
