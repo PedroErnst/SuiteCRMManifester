@@ -119,7 +119,7 @@ class UpdateManifestCommand extends Command
             throw new \Exception('Invalid instance path: ' . $this->instancePath);
         }
 
-        $command = 'cd ' . $this->instancePath . ' && git diff --name-only ' . $this->commit;
+        $command = 'cd ' . $this->instancePath . ' && git diff --name-only --diff-filter=d ' . $this->commit;
         exec($command, $this->files);
     }
 }
