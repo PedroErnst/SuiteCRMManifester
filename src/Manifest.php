@@ -163,20 +163,9 @@ class Manifest
         $copyFiles = [];
         foreach ($fileArr as $file) {
             if (strpos($file, 'en_us') !== false) {
-                $module = 'application';
-                if (strpos($file, 'custom/Extension/modules/') !== false) {
-                    $startPos = strpos($file, 'custom/Extension/modules/')
-                        + strlen('custom/Extension/modules/');
-                    $module = substr(
-                        $file,
-                        $startPos,
-                        strpos($file, '/', $startPos) - $startPos
-                    );
-
-                }
                 $langFiles[] = [
                     'from' => '<basepath>/' . $file,
-                    'to_module' => $module,
+                    'to_module' => $this->extractLangFileModuleName($file),
                     'language' => 'en_us',
                 ];
                 continue;
@@ -189,6 +178,26 @@ class Manifest
 
         $this->installDefs['copy'] = $copyFiles;
         $this->installDefs['language'] = $langFiles;
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    private function extractLangFileModuleName($file)
+    {
+        $module = 'application';
+        if (strpos($file, 'custom/Extension/modules/') !== false) {
+            $startPos = strpos($file, 'custom/Extension/modules/')
+                + strlen('custom/Extension/modules/');
+            $module = substr(
+                $file,
+                $startPos,
+                strpos($file, '/', $startPos) - $startPos
+            );
+
+        }
+        return $module;
     }
 
     /**
