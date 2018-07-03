@@ -44,6 +44,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Manifester\Command\NewManifestCommand;
 use Manifester\Manifester;
+use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -53,14 +54,14 @@ class NewCommandTest extends TestCase
     /**
      * @var string
      */
-    private $defaultManifestFolder;
+    private $folder;
 
     /**
      *
      */
     public function setUp()
     {
-        $this->defaultManifestFolder = __DIR__ . '/../test-manifest-folder/';
+        $this->folder = __DIR__ . 'manifest-folder';
     }
 
     /**
@@ -93,11 +94,16 @@ class NewCommandTest extends TestCase
         $command = $application->find('new');
         $commandTester = new CommandTester($command);
 
-        $commandTester->execute(['command' => $command->getName(), 'manifest-path' => $this->defaultManifestFolder]);
+        $fileSystem = vfsStream::setup($this->folder);
+
+        $this->assertFalse($fileSystem->hasChild('manifest.php'));
+        $this->assertFalse($fileSystem->hasChild('LICENSE.txt'));
+
+        $commandTester->execute(['command' => $command->getName(), 'manifest-path' => $fileSystem->url()]);
         $output = $commandTester->getDisplay();
         $this->assertContains('Created a new manifest', $output);
-        $this->assertFileExists($this->defaultManifestFolder);
-        $this->assertFileExists($this->defaultManifestFolder . '/manifest.php');
-        $this->assertFileExists($this->defaultManifestFolder . '/LICENSE.txt');
+
+        $this->assertTrue($fileSystem->hasChild('manifest.php'));
+        $this->assertTrue($fileSystem->hasChild('LICENSE.txt'));
     }
 }
